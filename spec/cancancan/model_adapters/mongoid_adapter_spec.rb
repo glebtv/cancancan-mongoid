@@ -133,7 +133,7 @@ RSpec.describe CanCan::ModelAdapters::MongoidAdapter do
 
       it 'handles :field.count' do
         obj = MongoidProject.create(titles: %w[Palatin Margrave])
-        @ability.can :read, MongoidProject, titles: {:$size => 2}
+        @ability.can :read, MongoidProject, titles: { :$size => 2 }
         expect(@ability.can?(:read, obj)).to eq(true)
         expect(MongoidProject.accessible_by(@ability, :read).to_a).to eq([obj])
 
@@ -155,7 +155,6 @@ RSpec.describe CanCan::ModelAdapters::MongoidAdapter do
         obj = MongoidProject.create(age: 50)
         @ability.can :read, MongoidProject, :age.gt => 45
         expect(@ability.can?(:read, obj)).to eq(true)
-        q = MongoidProject.accessible_by(@ability, :read)
         expect(MongoidProject.accessible_by(@ability, :read).to_a).to eq([obj])
 
         obj2 = MongoidProject.create(age: 40)
@@ -211,14 +210,10 @@ RSpec.describe CanCan::ModelAdapters::MongoidAdapter do
       @ability.can :read, MongoidSubProject, mongoid_project: { mongoid_category: { name: 'allowed' } }
       cat1 = MongoidCategory.create name: 'notallowed'
       proj1 = cat1.mongoid_projects.create name: 'Proj1'
-      sub1 = proj1.mongoid_sub_projects.create name: 'Sub1'
+      proj1.mongoid_sub_projects.create name: 'Sub1'
       cat2 = MongoidCategory.create name: 'allowed'
       proj2 = cat2.mongoid_projects.create name: 'Proj2'
       sub2 = proj2.mongoid_sub_projects.create name: 'Sub2'
-      q = MongoidSubProject.accessible_by(@ability)
-      #require 'irb'
-      #binding.irb
-
       expect(MongoidSubProject.accessible_by(@ability).to_a).to match_array([sub2])
     end
   end

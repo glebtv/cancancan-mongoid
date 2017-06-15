@@ -1,2 +1,2 @@
-ENV["MONGOID_ENV"] = "test"
-Mongoid.load!("spec/support/mongoid.yml")
+ENV['MONGOID_ENV'] = 'test'
+Mongoid.load!('spec/support/mongoid.yml')
